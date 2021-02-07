@@ -57,9 +57,12 @@ source:
     #########################################################################
     - ignore_libpython_macos.diff
 
+    # Added Sept 4 2020, but no new release since 2017
+    # https://github.com/ukoethe/vigra/commit/aaaf44d240aebd0eb3539b6e105a19a984000d81
+    - gcc9_compatibility.patch
+
 build:
-  skip: true  # [win and py<35]
-  number: 1021
+  number: 1022
   detect_binary_files_with_prefix: true
   run_exports:
     # Seems to change ABI between minor versions
