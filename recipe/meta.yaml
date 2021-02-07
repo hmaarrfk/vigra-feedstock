@@ -62,7 +62,6 @@ source:
     - gcc9_compatibility.patch
 
 build:
-  skip: true  # [win and py<35]
   number: 1022
   detect_binary_files_with_prefix: true
   run_exports:
