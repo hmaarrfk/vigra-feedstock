@@ -10,6 +10,7 @@ source:
   url: https://github.com/ukoethe/vigra/archive/{{ version_tag }}.tar.gz
   sha1: 518c7a9ef0e26e39563aeebf22bcee55a7d257c8
   patches:
+
     ##########################################################
     # Workaround for VS 2015                                 #
     #                                                        #
@@ -52,17 +53,22 @@ source:
     ###########################################################################################
     - fix_except_decl.diff
 
+    # Added Sept 4 2020, but no new release since 2017
+    # https://github.com/ukoethe/vigra/commit/aaaf44d240aebd0eb3539b6e105a19a984000d81
+    - gcc9_compatibility.patch
+
+    # These two patches are required to make pypy_support work
+    - more_informative_error.patch
+    - add_boost_python_major_mior.patch
+    - pypy_support.diff
+
     #########################################################################
     # Interpreter is statically linked on macOS so do not use `libpython`.  #
     #########################################################################
     - ignore_libpython_macos.diff
 
-    # Added Sept 4 2020, but no new release since 2017
-    # https://github.com/ukoethe/vigra/commit/aaaf44d240aebd0eb3539b6e105a19a984000d81
-    - gcc9_compatibility.patch
-
 build:
-  number: 1022
+  number: 1023
   detect_binary_files_with_prefix: true
   run_exports:
     # Seems to change ABI between minor versions
@@ -73,7 +79,6 @@ requirements:
   build:
     - {{ compiler("cxx") }}
     - cmake
-
   host:
     - python
     - nose

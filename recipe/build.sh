@@ -8,21 +8,6 @@ else
     export CXXFLAGS="-pthread ${CXXFLAGS}"
 fi
 
-
-PYTHON_LIB="${PREFIX}/lib/libpython${PY_VER}${SHLIB_EXT}"
-
-# libpython might be named with an 'm' suffix
-# There's probably a smart way to make cmake find libpython for us, but this works for now.
-if [[ ! -e "${PYTHON_LIB}" ]]; then
-    PYTHON_LIB="${PREFIX}/lib/libpython${PY_VER}m${SHLIB_EXT}"
-fi
-
-if [[ ! -e "${PYTHON_LIB}" ]]; then
-    echo "*** recipe/build.sh: Can't find libpython ***" 2>&1
-    exit 1
-fi
-
-EXTRA_CMAKE_ARGS="${EXTRA_CMAKE_ARGS} -DPYTHON_LIBRARIES=${PYTHON_LIB}"
 export EXTRA_CMAKE_ARGS
 
 if [[ "${cxx_compiler}" == "toolchain_cxx" ]];
@@ -64,8 +49,8 @@ cmake ..\
         -DBoost_LIBRARY_DIRS=${PREFIX}/lib \
         -DBoost_PYTHON_LIBRARY=${PREFIX}/lib/libboost_python${CONDA_PY}${SHLIB_EXT} \
 \
-        -DPYTHON_EXECUTABLE=${PYTHON} \
-        -DPYTHON_INCLUDE_PATH=${PREFIX}/include \
+        -DPython_ROOT_DIR=${PREFIX} \
+        -DPython_FIND_VIRTUALENV=ONLY \
 \
         -DZLIB_INCLUDE_DIR=${PREFIX}/include \
         -DZLIB_LIBRARY=${PREFIX}/lib/libz${SHLIB_EXT} \
@@ -80,10 +65,11 @@ cmake ..\
         -DJPEG_LIBRARY=${PREFIX}/lib/libjpeg${SHLIB_EXT} \
         ${EXTRA_CMAKE_ARGS}
 
-make -j${CPU_COUNT}
+make -j${CPU_COUNT} V=1 VERBOSE=1
 # Can't run tests due to a bug in the clang compiler provided with XCode.
 # For more details see here ( https://llvm.org/bugs/show_bug.cgi?id=21083 ).
 # Also, these tests are very intensive, which makes them challenging to run in CI.
 #eval ${LIBRARY_SEARCH_VAR}=$PREFIX/lib make check
-make check_python
+
 make install
+make check_python
