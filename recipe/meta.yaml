@@ -60,6 +60,7 @@ source:
     # These two patches are required to make pypy_support work
     - more_informative_error.patch
     - add_boost_python_major_mior.patch
+    # https://github.com/ukoethe/vigra/pull/485
     - pypy_support.diff
 
     #########################################################################
