@@ -13,6 +13,7 @@ cmake .. ^
         -DWITH_OPENEXR=1 ^
         -DWITH_LEMON=1 ^
         -DCMAKE_CXX_FLAGS="%CXXFLAGS% -DH5_BUILT_AS_DYNAMIC_LIB /EHsc -DFFTW_DLL" ^
+        -DPython_EXECUTABLE:FILEPATH=%PYTHON% ^
         -DBoost_PYTHON_LIBRARY:PATH="%LIBRARY_LIB%\boost_python%CONDA_PY%.lib" ^
         "%SRC_DIR%"
 if errorlevel 1 exit 1
